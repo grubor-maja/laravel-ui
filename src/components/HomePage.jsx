@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import LoginPage from './LoginPage';
 
 function HomePage({ onUsernameSubmit, onAdminLogin }) {
     const navigate = useNavigate();
+    
 
     const handleRegisterClick = () => {
         navigate('/register');
@@ -23,9 +24,10 @@ function HomePage({ onUsernameSubmit, onAdminLogin }) {
             </div>
             <div className="loginForm">
                 <LoginPage onUsernameSubmit={onUsernameSubmit} onAdminLogin={onAdminLogin} />
+                
                 <p>Do not have an account? <button className="registerButton" onClick={handleRegisterClick} title="Register">Register</button></p>
             </div>
-            <Button className="exploreButton" onClick={explore} title={'Explore'} />
+            
         </div>
     );
 }

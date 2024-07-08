@@ -16,6 +16,12 @@ function RegisterPage({ onUsernameSubmit }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSuccessfulRegistration = (token) => {
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', formData.name);
+        console.log('Sacuvao sam ti token');
+    };
+
     const handleClick = async () => {
         try {
             if (!formData.name || !formData.email || !formData.password) {
@@ -43,12 +49,13 @@ function RegisterPage({ onUsernameSubmit }) {
             if (response.ok) {
                 const data = await response.json();
                 onUsernameSubmit(formData.name);
+                handleSuccessfulRegistration(data.access_token);
                 console.log('Successful registration:', data);
                 navigate('/startgame');
             } else {
                 const errorData = await response.json();
                 console.error('Error during registration:', errorData);
-                setErrorMessage(errorData.message || 'Registration failed.');
+                setErrorMessage(errorData.password[0])
             }
         } catch (error) {
             console.error('Error during registration:', error);

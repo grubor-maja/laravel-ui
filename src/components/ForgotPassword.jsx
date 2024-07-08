@@ -30,7 +30,7 @@ function ForgotPassword() {
 
         } catch (error) {
             console.error('Error sending reset email:', error.message);
-            alert('Error sending reset email.')
+            alert('Acccount with given email does not exist.')
         }
     };
     const handleBack = () => {

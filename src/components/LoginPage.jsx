@@ -10,6 +10,7 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
     });
 
     const navigate = useNavigate();
+    const [errorMessage,setErrorMessage] = useState('');
 
     console.log('LoginPage props:', { onUsernameSubmit, onAdminLogin });
 
@@ -23,7 +24,18 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
         console.log('Sacuvao sam ti token');
     };
 
+    const validate = (email, password) => {
+        if(email == '' || password == '') {
+            return 1;           
+        }
+        return 0;
+    }
+
     const handleClick = async () => {
+        if(validate(formData.email,formData.password)) {
+            setErrorMessage('Morate uneti i email i password.');
+            return;
+        }
         try {
             const response = await fetch('http://127.0.0.1:8000/api/login', {
                 method: 'POST',
@@ -68,6 +80,7 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
 
         } catch (error) {
             console.error('Greška pri logovanju:', error);
+            setErrorMessage('Korisnik nije pronadjen.');
         }
     };
 
@@ -86,6 +99,7 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
                 <br />
                 <Button onClick={handleClick} title={'Login'} />
                 <Button onClick={handleClick3} title={'Forgot password'} />
+                {errorMessage && <div className="error">{errorMessage}</div>}
             </div>
         </>
     );

@@ -18,7 +18,7 @@ function ResultsPage({username, result,resetResult}) {
     const user = localStorage.getItem('user');
     const roomname = localStorage.getItem('naziv_sobe');
     const handleBack = () => {
-      navigate('/rooms');
+      navigate('/startgame');
   }
     
     const handleSaveResult = async () => {
@@ -58,8 +58,7 @@ function ResultsPage({username, result,resetResult}) {
         <div className = "joinGameContainer">
             <h2  className = "usernameLabel">{username}, your score is {result} </h2><br />
 
-        <Button onClick={handleClick} title={'Explore'}></Button>
-        <Button onClick={handleSaveResult} title={'Sacuvaj'}></Button>
+
         </div>
         </div>
         </>
