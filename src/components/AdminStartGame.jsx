@@ -5,7 +5,7 @@ import axios from 'axios';
 import AllRooms from './AllRooms';
 
 
-function AdminStartGame({ username, handleDifficulty }) {
+function AdminStartGame({ username, handleDifficulty,handleRoomName }) {
   const navigate = useNavigate();
   
 
@@ -42,7 +42,7 @@ function AdminStartGame({ username, handleDifficulty }) {
     <div className="joinGameContainer">
       <h2 className="usernameLabel">Welcome Admin: {username}</h2>
       <br />
-      <AllRooms></AllRooms>
+      <AllRooms handleRoomName={handleRoomName}></AllRooms>
       <Button onClick={() => handleClick2()} title={'Create quiz'}></Button>
       <Button onClick={() => logout()} title={'Logout'}></Button>
 

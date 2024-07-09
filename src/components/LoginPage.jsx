@@ -54,20 +54,21 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: 'Invalid response format' }));
                 console.error('Logovanje nije uspelo:', errorData);
+                setErrorMessage('Korisnik nije pronadjen.');
                 return;
             }
 
             const data = await response.json().catch(() => ({ message: 'Invalid response format' }));
             console.log('DATA', data);
-            console.log('onUsernameSubmit type:', typeof onUsernameSubmit); // Dodato za logovanje
+            console.log('onUsernameSubmit type:', typeof onUsernameSubmit); 
             if (typeof onUsernameSubmit === 'function') {
-                console.log('Calling onUsernameSubmit with:', data.user.name); // Dodato za logovanje
+                console.log('Calling onUsernameSubmit with:', data.user.name); 
                 onUsernameSubmit(data.user.name);
             } else {
                 console.error('onUsernameSubmit is not a function');
             }
             handleSuccessfulLogin(data.access_token);
-            console.log('Logovanje uspešno:', data);
+            console.log('Logovanje uspesno:', data);
 
             if (data.user.role === 'admin') {
                 if (typeof onAdminLogin === 'function') {
@@ -79,7 +80,7 @@ function LoginPage({ onUsernameSubmit, onAdminLogin }) {
             }
 
         } catch (error) {
-            console.error('Greška pri logovanju:', error);
+            console.error('Greska pri logovanju:', error);
             setErrorMessage('Korisnik nije pronadjen.');
         }
     };

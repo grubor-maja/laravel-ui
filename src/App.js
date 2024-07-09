@@ -18,7 +18,7 @@ import EnterCode from './components/EnterCode';
 function App() {
   const [username, setUsername] = useState('');
   const [result, setResult] = useState(0);
-  const [timeLeftMultiplier, setTimeLeftMultiplier] = useState(10); // Dodajte timeLeftMultiplier
+  const [timeLeftMultiplier, setTimeLeftMultiplier] = useState(10); 
   const [difficultyVariable, setDifficultyVariable] = useState('');
   const [roomName, setRoomName] = useState('');
   const handleResult = (newResult) => {
@@ -51,7 +51,7 @@ function App() {
       <Route path="/login" element={<LoginPage onUsernameSubmit={handleUsername} onAdminLogin={handleAdminLogin} />} />
         <Route path="/register" element={<RegisterPage onUsernameSubmit={handleUsername} />} />
         <Route path="/startgame" element={<StartGame username={username} handleDifficulty={handleDifficulty} handleRoomName={handleRoomName} />} />
-        <Route path="/admin/startgame" element={<AdminStartGame username={username} handleDifficulty={handleDifficulty} />} />
+        <Route path="/admin/startgame" element={<AdminStartGame username={username} handleDifficulty={handleDifficulty} handleRoomName = {handleRoomName} />} />
         <Route path="/createquiz" element={<CreateQuiz adminToken={adminToken} />} />
         <Route path="/rooms" element={<AllRooms handleRoomName={handleRoomName} />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />

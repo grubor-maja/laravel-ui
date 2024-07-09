@@ -15,6 +15,12 @@ function AllRooms({ handleRoomName }) {
     }, []);
 
     const handleClick = (room) => {
+
+        if (typeof handleRoomName === 'function') {
+            handleRoomName(room.naziv_sobe);
+        } else {
+            console.error('handleRoomName is not a function  ',typeof(handleRoomName));
+        }
         handleRoomName(room.naziv_sobe);
         
             if (room.Status === 'javna') {

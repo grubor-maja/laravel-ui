@@ -10,6 +10,7 @@ function StartGame({ username, handleDifficulty,handleRoomName }) {
   
 
   const handleClick = (difficulty) => {
+    
     handleDifficulty(difficulty);
     navigate('/questions', { state: { difficulty } });
   };
@@ -31,7 +32,7 @@ function logout() {
     navigate('/');
   })
   .catch(error => {
-    console.error('Error logging out:', error);
+    console.error('Greska u logu:', error);
     alert('Greska pri logoutu')
   });
 }

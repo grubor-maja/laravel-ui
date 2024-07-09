@@ -9,7 +9,7 @@ function EnterCode({ roomName }) {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate('/rooms');
+        navigate(-1);
     }
 
     const handleSubmit = async (e) => {
