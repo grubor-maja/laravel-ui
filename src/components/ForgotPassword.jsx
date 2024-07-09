@@ -21,16 +21,16 @@ function ForgotPassword() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to send reset email');
+                throw new Error('Neuspesno poslat mejl za resetovanje');
             }
 
-            console.log('Reset email sent successfully');
-            alert('Reset email sent successfully.')
+            console.log('Uspesno poslat mejl za resetovanje');
+            alert('Uspesno poslat mejl za resetovanje')
             navigate('/newpassword');
 
         } catch (error) {
-            console.error('Error sending reset email:', error.message);
-            alert('Acccount with given email does not exist.')
+            console.error('Greska u slanju mejla za resetovanje:', error.message);
+            alert('Korisnik sa datim mejlom ne postoji')
         }
     };
     const handleBack = () => {
