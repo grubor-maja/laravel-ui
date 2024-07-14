@@ -51,6 +51,7 @@ function RegisterPage({ onUsernameSubmit }) {
                 onUsernameSubmit(formData.name);
                 handleSuccessfulRegistration(data.access_token);
                 console.log('Successful registration:', data);
+                
                 navigate('/startgame');
             } else {
                 const errorData = await response.json();

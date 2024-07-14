@@ -154,21 +154,38 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
   
   const fetchQuizData = useCallback(async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/sobe/${roomName}/quiz`);
-      const data = await response.json();
+        let allQuestions = [];
+        if (roomName === "Istorija") {
+            const response = await fetch('https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple&encode=url3986');
+            const data = await response.json();
+            allQuestions = data.results.map((question) => {
+                const incorrectAnswers = question.incorrect_answers.map(ans => decodeURIComponent(ans));
+                const correctAnswer = decodeURIComponent(question.correct_answer);
+                const answers = [...incorrectAnswers, correctAnswer].sort(() => Math.random() - 0.5);
+                return {
+                    question: decodeURIComponent(question.question),
+                    answers: answers,
+                    correctAnswer: correctAnswer
+                };
+            });
+        } else {
+            const response = await fetch(`http://127.0.0.1:8000/api/sobe/${roomName}/quiz`);
+            const data = await response.json();
 
-      const firstRoom = data.soba;
-      const allQuestions = firstRoom.pitanja.map((question, index) => ({
-        question: question.tekst_pitanja,
-        answers: question.odgovori.map(odgovor => odgovor.tekst_odgovora),
-        correctAnswer: question.odgovori.find(odgovor => odgovor.tacan_odgovor === 1).tekst_odgovora
-      }));
+            const firstRoom = data.soba;
+            allQuestions = firstRoom.pitanja.map((question) => ({
+                question: question.tekst_pitanja,
+                answers: question.odgovori.map(odgovor => odgovor.tekst_odgovora),
+                correctAnswer: question.odgovori.find(odgovor => odgovor.tacan_odgovor === 1).tekst_odgovora
+            }));
+        }
 
-      setQuizData(allQuestions);
+        setQuizData(allQuestions);
     } catch (error) {
-      console.error('Error fetching quiz data:', error);
+        console.error('Error fetching quiz data:', error);
     }
-  }, [roomName]);
+}, [roomName]);
+
 
   const fetchUsersProgress = useCallback(async () => {
     try {
