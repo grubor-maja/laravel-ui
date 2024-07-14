@@ -62,12 +62,60 @@ function ResultsPage({ username, result, resetResult }) {
     });
   }, []);
 
+  useEffect(() => {
+
+    const script = document.createElement('script');
+    script.src = 'https://www.gstatic.com/charts/loader.js';
+    script.async = true;
+    script.onload = () => {
+      if (window.google) {
+        window.google.charts.load('current', { packages: ['corechart'] });
+        window.google.charts.setOnLoadCallback(drawChart);
+      }
+    };
+    document.body.appendChild(script);
+
+    function drawChart() {
+      const data = window.google.visualization.arrayToDataTable([
+        ['Task', 'Percentage'],
+        ['Score', result],
+        ['Remaining', 1000 - result],
+      ]);
+
+      const options = {
+        title: '',
+        pieHole: 0.4,
+        backgroundColor: 'transparent',
+        chartArea: {
+          backgroundColor: 'transparent'
+        },
+        legend: {
+          position: 'bottom',
+          textStyle: {
+            color: 'white'
+          }
+        },
+        titleTextStyle: {
+          color: 'white'
+        },
+      };
+
+      const chart = new window.google.visualization.PieChart(document.getElementById('piechart'));
+      chart.draw(data, options);
+    }
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [result]);
+
   return (
     <>
       <div className="resultsContainer">
         <MdArrowBack onClick={handleBack} className='backButton'></MdArrowBack>
         <div className="joinGameContainer">
           <h2 className="usernameLabel">{username}, your score is {result}</h2><br />
+          <div id="piechart" style={{ width: '900px', height: '500px' }}></div>
           <h3>Previous Results:</h3>
           <table>
             <thead>
