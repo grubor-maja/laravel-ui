@@ -18,7 +18,7 @@
 
 3. **Instalacija zavisnosti:**
 
-   Uverite se da imate instaliran Composer. Zatim pokrenite:
+   Uverite se da imate instaliran Node.js. Zatim pokrenite:
 
    ```bash
    npm install
