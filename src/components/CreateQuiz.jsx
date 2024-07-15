@@ -57,13 +57,13 @@ function CreateQuiz({adminToken}) {
 
     const token = localStorage.getItem('token');
     const validateForm = () => {
-        // Provera da li su sva polja popunjena
+       
         if (!formData.naziv_sobe) {
             setErrorMessage('Sva polja moraju biti popunjena');
             return false;
         }
 
-        // Provera pitanja i odgovora
+        
         for (let pitanje of formData.pitanja) {
             if (!pitanje.pitanje || pitanje.odgovori.some(odgovor => !odgovor)) {
                 setErrorMessage('Sva polja za pitanja i odgovore moraju biti popunjena');
@@ -71,7 +71,7 @@ function CreateQuiz({adminToken}) {
             }
         }
 
-        // Provera formata kod_sobe za privatne sobe
+        
 
             const kodSobeRegex = /^[a-zA-Z0-9]{6}$/;
             if (!kodSobeRegex.test(formData.kod_sobe)) {
@@ -80,7 +80,7 @@ function CreateQuiz({adminToken}) {
             }
         
 
-        setErrorMessage(''); // Resetovanje poruke greske ako nema greski
+        setErrorMessage(''); 
         return true;
     };
     

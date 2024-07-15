@@ -1,4 +1,3 @@
-// Button.jsx
 import React from 'react';
 
 function Button2({ title, onClick, difficulty, className, disabled }) {

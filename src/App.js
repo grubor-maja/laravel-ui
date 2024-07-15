@@ -44,7 +44,6 @@ function App() {
   const [adminToken, setAdminToken] = useState(null);
 
   const handleAdminLogin = (token) => {
-    // Cuvanje tokena u parent komponenti
     setAdminToken(token);
   };
 

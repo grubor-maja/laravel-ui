@@ -263,10 +263,8 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
   }, [otherUsersQuestion]);
 
   const countOnlineUsers = useMemo(() => {
-    // Users who are answering the same question as the current user
     const usersAnswering = Object.values(otherUsersQuestion).filter(user => user.inRoom && user.questionNumber === brojac).length;
     
-    // Users who have answered the current question or are past it
     const usersAnswered = Object.values(otherUsersQuestion).filter(user => user.inRoom && user.questionNumber > brojac).length;
     
     return { usersAnswering, usersAnswered };
