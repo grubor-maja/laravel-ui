@@ -21,6 +21,7 @@ function App() {
   const [timeLeftMultiplier, setTimeLeftMultiplier] = useState(10); 
   const [difficultyVariable, setDifficultyVariable] = useState('');
   const [roomName, setRoomName] = useState('');
+  const [roomCode, setRoomCode] = useState('');
   const handleResult = (newResult) => {
     setResult(newResult);
   };
@@ -34,6 +35,9 @@ function App() {
   const handleRoomName = (newRoomName) => {
     setRoomName(newRoomName);
   };
+  const handleRoomCode = (newRoomCode) => {
+    setRoomCode(newRoomCode);
+  };  
   const handleUsername = (newUsername) => {
     setUsername(newUsername);
   };
@@ -57,9 +61,9 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/newpassword" element={<NewPassword />} />
         <Route path="/onlineusers" element={<OnlineUsers />} />
-        <Route path="/entercode" element={<EnterCode roomName={roomName} />} />
+        <Route path="/entercode" element={<EnterCode roomName={roomName} handleRoomCode={handleRoomCode} />} />
         <Route path="/results" element={<ResultsPage username={username} result={result} resetResult={resetResult} />} />
-        <Route path="/questions2" element={<QuestionsPage2 handleResult={handleResult} result={result} timeLeftMultiplier={timeLeftMultiplier} difficulty={difficultyVariable} roomName={roomName} username={username} />} />
+        <Route path="/questions2" element={<QuestionsPage2 handleResult={handleResult} result={result} timeLeftMultiplier={timeLeftMultiplier} difficulty={difficultyVariable} roomName={roomName} username={username} roomCode={roomCode} />} />
       </Routes>
     </BrowserRouter>
   );
