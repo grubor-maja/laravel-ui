@@ -25,14 +25,14 @@
    ```
 4. **Kreiranje .env fajla:**
 
-Kreirajte .env fajl u projekat_frontend direktorijumu kako biste sačuvali promenljive okruženja za React aplikaciju.
-Primer sadržaja .env fajla:
+   Kreirajte .env fajl u projekat_frontend direktorijumu kako biste sačuvali promenljive okruženja za React aplikaciju.
+   Primer sadržaja .env fajla:
 
-   ```bash
-REACT_APP_API_URL=http://localhost:8000/api
-REACT_APP_SOCKET_URL=http://localhost:6001
-   ```   
-   
+      ```bash
+   REACT_APP_API_URL=http://localhost:8000/api
+   REACT_APP_SOCKET_URL=http://localhost:6001
+      ```   
+      
 5. **Pokretanje React razvojnog servera:**
 
    ```bash
