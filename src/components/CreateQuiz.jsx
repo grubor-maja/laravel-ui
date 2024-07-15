@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
 import { useNavigate } from 'react-router-dom';
-import Button2 from './Button2';
+import Button from './Button';
 import { MdArrowBack } from "react-icons/md";
+import Button2 from './Button2';
 
-function CreateQuiz({ adminToken }) {
-    const navigate = useNavigate();
+function CreateQuiz({adminToken}) {
+    const navigate = useNavigate ();
     const [formData, setFormData] = useState({
         kod_sobe: '',
         naziv_sobe: '',
@@ -16,15 +17,15 @@ function CreateQuiz({ adminToken }) {
         })),
         tezina: 'easy',
         maksimalan_broj_igraca: 10,
-        status: 'javna',
+        status: 'privatna',
         trenutnoPitanje: 0
     });
-
-    const [errorMessage, setErrorMessage] = useState('');
-
+    
     const handleBack = () => {
         navigate(-1);
     }
+
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e, index) => {
         const { name, value } = e.target;
@@ -32,11 +33,12 @@ function CreateQuiz({ adminToken }) {
         newPitanja[index][name.split('.')[1]] = value; 
         setFormData({ ...formData, pitanja: newPitanja });
     };
-
+    
     const handleChange2 = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+    
 
     const handleOdgovorChange = (e, indexPitanja, indexOdgovora) => {
         const { value } = e.target;
@@ -53,9 +55,10 @@ function CreateQuiz({ adminToken }) {
         setFormData({ ...formData, trenutnoPitanje: Math.min(formData.trenutnoPitanje + 1, formData.pitanja.length - 1) });
     };
 
+    const token = localStorage.getItem('token');
     const validateForm = () => {
         // Provera da li su sva polja popunjena
-        if (!formData.naziv_sobe || !formData.tezina || !formData.status) {
+        if (!formData.naziv_sobe) {
             setErrorMessage('Sva polja moraju biti popunjena');
             return false;
         }
@@ -69,27 +72,25 @@ function CreateQuiz({ adminToken }) {
         }
 
         // Provera formata kod_sobe za privatne sobe
-        if (formData.status === 'privatna') {
+
             const kodSobeRegex = /^[a-zA-Z0-9]{6}$/;
             if (!kodSobeRegex.test(formData.kod_sobe)) {
                 setErrorMessage('Kod za sobu mora da sadrzi 6 karaktera');
                 return false;
             }
-        }
+        
 
         setErrorMessage(''); // Resetovanje poruke greske ako nema greski
         return true;
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
             return;
         }
-
-        const token = localStorage.getItem('token');
-
+    
         try {
             const response = await axios.post(
                 'http://127.0.0.1:8000/api/sobe', 
@@ -101,12 +102,24 @@ function CreateQuiz({ adminToken }) {
                 }
             );
             console.log(response.data);
-            window.alert('Kviz uspesno kreiran'); 
             navigate('/admin/startgame'); 
         } catch (error) {
-            console.error('Greska u kreiranju kviza:', error);
+            console.error(formData);
+            console.error('Error creating quiz:', error.response ? error.response.data : error.message);
+            setErrorMessage('Error creating quiz: ' + (error.response ? JSON.stringify(error.response.data) : error.message));
+            
         }
     };
+     
+
+    
+
+    function Probica({ adminToken }) {
+        console.log('Maja');
+        console.log({ adminToken });
+    
+       
+    }
 
     const { trenutnoPitanje } = formData;
     const trenutnoPitanjeData = formData.pitanja[trenutnoPitanje];
@@ -165,15 +178,7 @@ function CreateQuiz({ adminToken }) {
                             <option value="hard">Hard</option>
                         </select>
                     </div>
-                    <br />
-                    <br />
-                    <div className='formGroup'>
-                        <label>Room status:</label>
-                        <select name="status" value={formData.status} onChange={handleChange2}>
-                            <option value="javna">Public</option>
-                            <option value="privatna">Private</option>
-                        </select>
-                    </div>
+
                     <br />
                     {formData.status === 'privatna' && (
                         <div className='formGroup'>
@@ -189,5 +194,4 @@ function CreateQuiz({ adminToken }) {
         </>
     );
 }
-
 export default CreateQuiz;
