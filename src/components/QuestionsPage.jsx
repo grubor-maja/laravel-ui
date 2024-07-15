@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
@@ -43,34 +45,45 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
 
   const updateInRoomStatus = useCallback((inRoom) => {
     if (!username) {
-      console.error('Username fali');
-      return;
+        console.error('Username fali');
+        return;
     }
 
-    fetch('http://127.0.0.1:8000/api/updateInRoomStatus', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    console.log('Sending updateInRoomStatus request:', {
         room: roomName,
         username: username,
         inRoom: inRoom,
-      }),
+        questionNumber: brojac, // Dodavanje broja pitanja
+    });
+
+    fetch('http://127.0.0.1:8000/api/updateInRoomStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            room: roomName,
+            username: username,
+            inRoom: inRoom,
+            questionNumber: brojac, // Dodavanje broja pitanja
+        }),
     })
-      .then(response => {
+    .then(response => {
         if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
+            return response.text().then(text => {
+                console.error('Response is not OK:', text);
+                throw new Error(text);
+            });
         }
         return response.json();
-      })
-      .then(data => {
+    })
+    .then(data => {
         console.log('inRoom status uspesno azuriran:', data);
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         console.error('Greska u azuriranju inRoom statusa:', error);
-      });
-  }, [username, roomName]);
+    });
+}, [username, roomName, brojac]);
 
   const handleNextClick = useCallback(() => {
     if (!username) {
@@ -154,38 +167,21 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
   
   const fetchQuizData = useCallback(async () => {
     try {
-        let allQuestions = [];
-        if (roomName === "Istorija") {
-            const response = await fetch('https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple&encode=url3986');
-            const data = await response.json();
-            allQuestions = data.results.map((question) => {
-                const incorrectAnswers = question.incorrect_answers.map(ans => decodeURIComponent(ans));
-                const correctAnswer = decodeURIComponent(question.correct_answer);
-                const answers = [...incorrectAnswers, correctAnswer].sort(() => Math.random() - 0.5);
-                return {
-                    question: decodeURIComponent(question.question),
-                    answers: answers,
-                    correctAnswer: correctAnswer
-                };
-            });
-        } else {
-            const response = await fetch(`http://127.0.0.1:8000/api/sobe/${roomName}/quiz`);
-            const data = await response.json();
+      const response = await fetch(`http://127.0.0.1:8000/api/sobe/${roomName}/quiz`);      
+      const data = await response.json();
 
-            const firstRoom = data.soba;
-            allQuestions = firstRoom.pitanja.map((question) => ({
-                question: question.tekst_pitanja,
-                answers: question.odgovori.map(odgovor => odgovor.tekst_odgovora),
-                correctAnswer: question.odgovori.find(odgovor => odgovor.tacan_odgovor === 1).tekst_odgovora
-            }));
-        }
+      const firstRoom = data.soba;
+      const allQuestions = firstRoom.pitanja.map((question, index) => ({
+        question: question.tekst_pitanja,
+        answers: question.odgovori.map(odgovor => odgovor.tekst_odgovora),
+        correctAnswer: question.odgovori.find(odgovor => odgovor.tacan_odgovor === 1).tekst_odgovora
+      }));
 
-        setQuizData(allQuestions);
+      setQuizData(allQuestions);
     } catch (error) {
-        console.error('Error fetching quiz data:', error);
+      console.error('Error fetching quiz data:', error);
     }
-}, [roomName]);
-
+  }, [roomName]);
 
   const fetchUsersProgress = useCallback(async () => {
     try {
@@ -252,7 +248,7 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
 
   
   useEffect(() => {
-    const interval = setInterval(fetchUsersProgress, 10000); 
+    const interval = setInterval(fetchUsersProgress, 3000); 
     return () => clearInterval(interval);
   }, [fetchUsersProgress]);
 
@@ -267,11 +263,16 @@ const QuestionsPage2 = ({ handleResult, timeLeftMultiplier, difficulty, roomName
   }, [otherUsersQuestion]);
 
   const countOnlineUsers = useMemo(() => {
+    // Users who are answering the same question as the current user
     const usersAnswering = Object.values(otherUsersQuestion).filter(user => user.inRoom && user.questionNumber === brojac).length;
-    const usersAnswered = Object.values(otherUsersQuestion).filter(user => user.inRoom && user.questionNumber !== brojac).length;
+    
+    // Users who have answered the current question or are past it
+    const usersAnswered = Object.values(otherUsersQuestion).filter(user => user.inRoom && user.questionNumber > brojac).length;
+    
     return { usersAnswering, usersAnswered };
   }, [otherUsersQuestion, brojac]);
-
+  
+  
   const { usersAnswering, usersAnswered } = countOnlineUsers;
 
   return (

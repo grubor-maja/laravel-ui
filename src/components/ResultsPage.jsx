@@ -63,7 +63,6 @@ function ResultsPage({ username, result, resetResult }) {
   }, []);
 
   useEffect(() => {
-
     const script = document.createElement('script');
     script.src = 'https://www.gstatic.com/charts/loader.js';
     script.async = true;
@@ -125,16 +124,21 @@ function ResultsPage({ username, result, resetResult }) {
               </tr>
             </thead>
             <tbody>
-              {previousResults.map((res, index) => (
+              {Object.values(previousResults.reduce((acc, res) => {
+                acc[res.ime_igraca] = res;
+                return acc;
+              }, {})).map((res, index) => (
                 <tr key={index}>
                   <td>{res.ime_igraca}</td>
                   <td>{res.trenutni_rezultat}</td>
                 </tr>
               ))}
-              <tr>
-                <td>{username}</td>
-                <td>{result}</td>
-              </tr>
+              {!previousResults.some(res => res.ime_igraca === username && res.trenutni_rezultat === result) && (
+                <tr>
+                  <td>{username}</td>
+                  <td>{result}</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
