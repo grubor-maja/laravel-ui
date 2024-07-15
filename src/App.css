@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: rgb(39, 4, 39);
+  background-color: rgb(8, 22, 2);
   color: white;
   background-image: url('./images/question2.jpg');
   background-repeat: no-repeat;
@@ -23,6 +23,8 @@ body {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+
 
 .App-header {
   align-items: center;
